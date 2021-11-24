@@ -1,13 +1,15 @@
 pipeline {
     agent any
-    tools {
-        maven 'maven3'
-    }
-    options {
-        buildDiscarder logRotator(daysToKeepStr: '5', numToKeepStr: '7')
+	environment {
+        PATH = "$PATH:/opt/apache-maven-3.6.3/bin"
     }
     stages{
-        stage('Build'){
+        stage('GetCode'){
+            steps{
+                git 'https://github.com/RatiRanjanDas/simple-app.git'
+            }
+         }
+		stage('Build'){
             steps{
                  sh script: 'mvn clean package'
                  archiveArtifacts artifacts: 'target/*.war', onlyIfSuccessful: true
